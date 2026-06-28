@@ -16,8 +16,6 @@ def inject_config(app):
     app.config.update(
         {
             "RECAPTCHA_SITE_KEY": os.getenv("RECAPTCHA_SITE_KEY", _TEST_SITE_KEY),
-            "RECAPTCHA_SECRET_KEY": os.getenv(
-                "RECAPTCHA_SECRET_KEY", _TEST_SECRET_KEY
-            ),
+            "RECAPTCHA_SECRET_KEY": os.getenv("RECAPTCHA_SECRET_KEY", _TEST_SECRET_KEY),
         }
     )
