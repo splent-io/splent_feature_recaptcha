@@ -2,6 +2,8 @@ import requests
 from flask import current_app
 from markupsafe import Markup
 
+from splent_framework.services.service_locator import service_proxy
+
 VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
 
@@ -12,10 +14,28 @@ class RecaptchaService:
     ``CaptchaService`` name (the alternative to cloudflare). Templates use the
     captcha_widget()/captcha_script() helpers; routes call verify() before
     accepting a submission.
+
+    Keys are read from runtime SettingsService first (admin panel), then fall
+    back to the product config (RECAPTCHA_SITE_KEY / RECAPTCHA_SECRET_KEY).
     """
 
+    def _setting(self, key):
+        try:
+            return service_proxy("SettingsService").get(key, None)
+        except Exception:
+            return None
+
     def site_key(self):
+        value = self._setting("recaptcha_site_key")
+        if value:
+            return value
         return current_app.config.get("RECAPTCHA_SITE_KEY", "")
+
+    def secret_key(self):
+        value = self._setting("recaptcha_secret_key")
+        if value:
+            return value
+        return current_app.config.get("RECAPTCHA_SECRET_KEY", "")
 
     def enabled(self):
         return bool(self.site_key())
@@ -35,7 +55,7 @@ class RecaptchaService:
         )
 
     def verify(self, token, remoteip=None):
-        secret = current_app.config.get("RECAPTCHA_SECRET_KEY", "")
+        secret = self.secret_key()
         if not secret:
             return True
         if not token:

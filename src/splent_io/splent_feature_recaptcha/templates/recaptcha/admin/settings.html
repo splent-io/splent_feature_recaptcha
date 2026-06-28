@@ -1,0 +1,53 @@
+{% extends "base_template.html" %}
+
+{% block title %}Captcha — Google reCAPTCHA{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Captcha — Google reCAPTCHA</h1>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' }} py-2">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<form method="POST">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 class="h5 mb-0">reCAPTCHA keys</h2>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label" for="recaptcha_site_key">Site key</label>
+                    <input type="text" name="recaptcha_site_key" id="recaptcha_site_key"
+                           class="form-control"
+                           value="{{ setting('recaptcha_site_key', '') }}"
+                           autocomplete="off">
+                    <div class="form-text">The public key embedded in the widget on your forms.</div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="recaptcha_secret_key">Secret key</label>
+                    <input type="password" name="recaptcha_secret_key" id="recaptcha_secret_key"
+                           class="form-control"
+                           value="{{ setting('recaptcha_secret_key', '') }}"
+                           autocomplete="off">
+                    <div class="form-text">The private key used server-side to verify submissions. Never share it.</div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3 mb-0">
+                Leave these blank to use Google's official <strong>test keys</strong>, which always pass —
+                handy for development but they do <em>not</em> protect your forms.
+                Get real keys for your domain at
+                <a href="https://www.google.com/recaptcha/admin" target="_blank" rel="noopener">
+                    https://www.google.com/recaptcha/admin</a>.
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}
