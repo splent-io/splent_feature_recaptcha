@@ -53,3 +53,12 @@ templates = ["recaptcha/admin/settings.html"]
 models    = []
 hooks     = ["layout.authenticated_sidebar"]
 routes    = false
+
+# ── Configuration ─────────────────────────────────────────────────────────
+# The defaults are Google's documented reCAPTCHA v2 TEST keys, which always
+# pass, so development works out of the box. A production product sets its
+# real pair in its own .env, or from the admin panel, which wins at request
+# time.
+[tool.splent.config]
+RECAPTCHA_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+RECAPTCHA_SECRET_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
