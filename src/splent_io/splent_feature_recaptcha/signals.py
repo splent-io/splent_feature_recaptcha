@@ -22,3 +22,11 @@ def validate_recaptcha_contact(sender, form=None, remoteip=None, **kwargs):
 
     token = form.get("g-recaptcha-response") if form else None
     return RecaptchaService().verify(token, remoteip)
+
+
+@connect_signal("careers-submitting", "splent_feature_recaptcha")
+def validate_recaptcha_careers(sender, form=None, remoteip=None, **kwargs):
+    from splent_io.splent_feature_recaptcha.services import RecaptchaService
+
+    token = form.get("g-recaptcha-response") if form else None
+    return RecaptchaService().verify(token, remoteip)
